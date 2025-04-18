@@ -107,31 +107,39 @@ paths:
     get:
       summary: Get specific order by specific reference
       parameters:
-        - in: path
-          name: reference
-          schema:
-            type: string
-          required: true
+        - $ref: '#/components/parameters/OrderReference'
       responses:
         200:
           description: Order retrieved
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  totalAmount:
-                    type: number
-                  actualStatus:
-                    $ref: '#/components/schemas/OrderStatus'
-                  dishes:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/DishOrder'
+                $ref: '#/components/schemas/Order'
+  /orders/{reference}/dishes:
+    put:
+      summary: Set dishes inside specific existing order
+      parameters:
+        - $ref: '#/components/parameters/OrderReference'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrder'
+      responses:
+        200:
+          description: Order with dishes set with ordered quantity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
 components:
   parameters:
+    OrderReference:
+      in: path
+      name: reference
+      schema:
+        type: string
+      required: true
     IngredientIdentifier:
       in: path
       name: id
@@ -158,6 +166,35 @@ components:
         - CONFIRMED
         - IN_PROGRESS
         - DELIVERED
+    UpdateOrder:
+      type: object
+      properties:
+        orderStatus:
+          $ref: '#/components/schemas/OrderStatus'
+        dishes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateDishOrder'
+    CreateDishOrder:
+      type: object
+      properties:
+        dishIdentifier:
+          type: integer
+        quantityOrdered:
+          type: integer
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+        totalAmount:
+          type: number
+        actualStatus:
+          $ref: '#/components/schemas/OrderStatus'
+        dishes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DishOrder'
     CreateDishIngredient:
       allOf:
         - $ref: '#/components/schemas/IngredientBasicProperty'
