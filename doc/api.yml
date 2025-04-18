@@ -115,6 +115,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
+    post:
+      summary: Create new order with specific reference
+      description: In case reference is already use, throws 400 response.
+      parameters:
+        - $ref: '#/components/parameters/OrderReference'
+      responses:
+        200:
+          description: Created Order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
   /orders/{reference}/dishes:
     put:
       summary: Set dishes inside specific existing order
