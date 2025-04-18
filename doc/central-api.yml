@@ -1,0 +1,120 @@
+openapi: 3.0.3
+info:
+  title: Central Restaurant Management API - 2025 [J]
+  description: This API retrieves data from Restaurant Management API to provide dashboard
+  version: 1.0.0
+servers:
+  - url: 'https://localhost:8080'
+paths:
+  /bestSales:
+    get:
+      summary: Get list of best sales according to dishes most sold for all sales point
+      parameters:
+        - in: query
+          name: top
+          schema:
+            type: integer
+          description: Example, if top = 5, then the list will contain the 5 best sales
+          required: true
+      responses:
+        200:
+          description: List of best sales
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BestSales'
+  /dishes/{id}/bestProcessingTime:
+    get:
+      summary: Get list of dishes with best processing time according to dishes preparation for all sales point
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          description: Dish identifier inside the central management API (not inside each sales point)
+          required: true
+        - in: query
+          name: top
+          schema:
+            type: integer
+          description: |
+            Example, if top = 3, then the list will contain the 5 dishes with best processing time.
+        - in: query
+          name: durationUnit
+          schema:
+            $ref: '#/components/schemas/DurationUnit'
+          required: false
+          description: By default, SECONDS is chosen.
+        - in: query
+          name: calculationMode
+          schema:
+            type: string
+            enum:
+              - AVERAGE
+              - MINIMUM
+              - MAXIMUM
+          required: false
+          description: By default, AVERAGE is chosen.
+      responses:
+        200:
+          description: List of dishes with best processing time
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BestProcessingTime'
+components:
+  schemas:
+    BestSales:
+      type: object
+      properties:
+        updatedAt:
+          type: string
+          format: date-time
+        sales:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesElement'
+    SalesElement:
+      properties:
+        salesPoint:
+          type: string
+          example: Analamahintsy
+        dish:
+          type: string
+          example: Hot Dog
+        quantitySold:
+          type: integer
+          format: int64
+        totalAmount:
+          type: number
+          example: 0
+    DurationUnit:
+      type: string
+      enum:
+        - SECONDS
+        - MINUTES
+        - HOUR
+    BestProcessingTime:
+      type: object
+      properties:
+        updatedAt:
+          type: string
+          format: date-time
+        bestProcessingTimes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BestProcessingTimeElement'
+    BestProcessingTimeElement:
+      type: object
+      properties:
+        salesPoint:
+          type: string
+          example: Antanimena
+        dish:
+          type: string
+          example: Omelette
+        preparationDuration:
+          type: number
+          example: 180.5
+        durationUnit:
+          $ref: '#/components/schemas/DurationUnit'
