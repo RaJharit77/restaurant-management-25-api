@@ -106,6 +106,7 @@ paths:
   /orders/{reference}:
     get:
       summary: Get specific order by specific reference
+      description: In case any order with provided ID found, throws 404 response.
       parameters:
         - $ref: '#/components/parameters/OrderReference'
       responses:
