@@ -6,6 +6,16 @@ info:
 servers:
   - url: 'https://localhost:8080'
 paths:
+  /syncrhonization:
+    post:
+      summary: Synchronize data from restaurant management API.
+      responses:
+        200:
+          description: |
+            Synchronized data from restaurant management APIs (plural).
+            When data is retrieved from restaurant management APIs, 
+            central API must update needed data used to provide GET /bestSales and GET /bestProcessingTime. 
+            Data must be stored inside central API, by just updating values without getting historic.
   /bestSales:
     get:
       summary: Get list of best sales according to dishes most sold for all sales point
