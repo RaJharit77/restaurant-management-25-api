@@ -77,7 +77,32 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Dish'
-
+  /dishes/{id}/ingredients:
+    put:
+      summary: Compose a specific dish with some ingredients
+      description: |
+        In case the ingredients already exist, so only set required quantity for this specific dish.
+        If ingredients do not exist (by its unique name), create ingredient and set required quantity at the same time for this specific dish.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateDishIngredient'
+      responses:
+        200:
+          description: Dish with new ingredients
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dish'
 components:
   parameters:
     IngredientIdentifier:
@@ -99,6 +124,13 @@ components:
         type: int
         required: false
   schemas:
+    CreateDishIngredient:
+      allOf:
+        - $ref: '#/components/schemas/IngredientBasicProperty'
+      type: object
+      properties:
+        requiredQuantity:
+          type: numeric
     Dish:
       type: object
       properties:
