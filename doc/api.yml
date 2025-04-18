@@ -132,6 +132,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
+  /orders/{reference}/dishes/{dishId}:
+    put:
+      summary: Update dish order status
+      parameters:
+        - $ref: '#/components/parameters/OrderReference'
+        - in: path
+          name: dishId
+          schema:
+            type: integer
+            description: Dish identifier
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDishOrderStatus'
+      responses:
+        200:
+          description: Order with dishes with updated status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
 components:
   parameters:
     OrderReference:
@@ -166,6 +189,11 @@ components:
         - CONFIRMED
         - IN_PROGRESS
         - DELIVERED
+    UpdateDishOrderStatus:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/OrderStatus'
     UpdateOrder:
       type: object
       properties:
